@@ -1,0 +1,11 @@
+@Import(Cat.class):调用Cat的无参构造器，创建对应的bean，用法见AppConf(.java)。
+@Configuration:用法见AppConf
+    标准此注解的类为配置类，此类的方法上标注@Bean，则表示该方法用来创建bean，bean的名字是方法名
+@ConfigurationProperties(prefix="dog"):
+    在Dog类上标注，作用是使配置文件(如application.properties)的dog.属性能给Dog的bean赋值。
+    用法1:
+        在AppConf类上标注@EnableConfigurationProperties(Cat.class)，
+        在Cat类上标注@ConfigurationProperties，
+        那么会自动生成Cat的bean，并用配置文件的属性赋值。
+    用法2:在Dog类上标注@Component和@ConfigurationProperties。
+@Conditional:根据条件觉得是否创建bean，用法见AppConf和Dog。
