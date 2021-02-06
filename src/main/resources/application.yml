@@ -1,0 +1,33 @@
+dog:
+  nickname: reddog
+cat:
+  catname: greencat
+
+spring:
+  mvc:
+    static-path-pattern: /st/**
+  web:
+    resources:
+      static-locations: classpath:haha,classpath:templates,classpath:static,classpath:resources
+  thymeleaf:
+    cache: true
+  devtools:
+    restart:
+      enabled: true  #设置开启热部署
+      additional-paths: src/main/java #重启目录
+      exclude: WEB-INF/**
+  freemarker:
+      cache: false    #页面不加载缓存，修改即时生效
+  servlet:
+    multipart:
+      max-request-size: 2MB    # 上传文件总的最大值
+      max-file-size: 10MB   # 单个文件的最大值
+  datasource:
+    username: root
+    password:
+    url: jdbc:mysql://localhost:3306/db1?serverTimezone=UTC&characterEncoding=utf-8&useSSL=false
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml

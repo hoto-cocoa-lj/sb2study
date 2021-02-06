@@ -1,0 +1,17 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<th:block  th:fragment="headpart">
+    <meta charset="UTF-8">
+</th:block>
+
+<th:block th:fragment="jspart">
+    <script src="http://lib.baomitu.com/jquery/3.5.1/jquery.min.js"></script>
+</th:block>
+
+<div id="part1" th:text="${a}">哈哈</div>
+
+<div th:fragment="part2">
+    <a href="www.baidu.com" th:href="@{/hello}">hello1!</a><br>
+    <a href="www.baidu.com" th:href="${link}">hello2!</a><br>
+</div>
+

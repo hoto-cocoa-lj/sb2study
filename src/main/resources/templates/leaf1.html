@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="copy::headpart"></th:block>
+    <title>Title</title>
+</head>
+<body>
+
+<th:block th:replace="copy::jspart"></th:block>
+
+[[${session.cat}]]
+
+<div th:insert="copy::#part1"></div>
+<div th:insert="copy::part2"></div>
+
+<h1 th:insert="copy::#part1">insert</h1>
+<h1 th:replace="copy::#part1">replace</h1>
+<h1 th:include="copy::#part1">include</h1>
+</body>
+</html>

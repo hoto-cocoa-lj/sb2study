@@ -1,3 +1,6 @@
+springboot2笔记:
+重启springboot项目可能有些数据没更新，可以maven clean package试试。
+
 @Import(Cat.class):调用Cat的无参构造器，创建对应的bean，用法见AppConf(.java)。
 @Configuration:用法见AppConf
     标准此注解的类为配置类，此类的方法上标注@Bean，则表示该方法用来创建bean，bean的名字是方法名
@@ -9,3 +12,62 @@
         那么会自动生成Cat的bean，并用配置文件的属性赋值。
     用法2:在Dog类上标注@Component和@ConfigurationProperties。
 @Conditional:根据条件觉得是否创建bean，用法见AppConf和Dog。
+
+
+spring.web.resources.static-locations= classpath:haha/
+    :可访问haha文件夹下的静态文件，/static和/resources等无法访问
+
+#http://localhost:8080/q/index.html     ok
+#http://localhost:8080/q                ng
+spring.mvc.static-path-pattern= /q/**
+    :url里加上/q才能访问静态文件
+把favicon.ico放静态文件目录下，即可设置标题栏的图标。
+
+<form method="post" action="/user">
+    <input name="name" value="slq">
+    <input name="dog.nickname" value="slqdog">
+    <input type="submit" value="submit">
+</form>
+User类有Dog dog字段，Dog类有String nickname字段，dog.nickname可以给该字段的nickname赋值。
+
+@{}:超链接url表达式。例如：<script th:src="@{/resources/js/jquery/jquery.json-2.4.min.js}"
+
+thymeleaf的引入:见copy.html和leaf1.html
+    通过th:fragment或者id声明被引入的部分，通过th:insert/replace/include引入
+        insert :被引入部分插入到引入部分
+        replace:被引入部分替换掉引入部分
+        include:被引入部分的内部插入到引入部分
+    还可以引入共通的js,css文件，<head/>部分
+
+[[]]类似vue的{{}}，[[${session.cat}]]可以拿到session里的值。
+
+文件上传见HelloController
+
+过滤器见filter和App:
+    1,App加上@ServletComponentScan
+    2，MyFilter实现servlet.Filter，加上@WebFilter
+        @WebFilter里urlPatterns = {"/st/*"}即可过滤"/st/**"(如/st/123/1.jpg)，
+        写"/st/**"也可以。
+
+拦截器见interceptor，AppConf和application.yml：
+    1，AppConf里addInterceptors，并加上拦截路径和放行路径，放行静态文件
+    2，实现HandlerInterceptor，加上@Component(也可在AppConf里new)
+    3，可能需要在application.yml配置静态文件路径的前缀
+
+spring:
+  mvc:
+    static-path-pattern: /static/**
+如上设置后，通过url访问各自静态文件(html/js/css/jpg等)，都需要加上static，
+    如项目名/1.jpg-->项目名/static/1.jpg，通过controller跳转的url不用加
+把favicon.ico放在静态文件路径下，获取时不会自动加上/static，所以会找不到(默认的index.html也找不到)。可以用下面的方法解决：
+    @RequestMapping("/favicon.ico")
+    public String favicon(){return "forward:/st/favicon.ico";}
+
+整合mybatis：
+    1，添加maven依赖mybatis-spring-boot-starter
+    2，配置文件里配置spring.datasource，见application.yml
+    3，sql语句写在xml里时，编写mapper.xml，配置文件里配置mybatis.mapper-locations扫描mapper.xml
+    4，编写mapper接口，加@Repository，可以用注解写sql
+    5，启动类App里添加@MapperScan("jp.slq.mapper")，扫描mapper接口
+事务配置：
+    service接口添加@Transactional，App添加@EnableTransactionManagement(App不添加似乎也可以)
