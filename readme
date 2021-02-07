@@ -71,3 +71,29 @@ spring:
     5，启动类App里添加@MapperScan("jp.slq.mapper")，扫描mapper接口
 事务配置：
     service接口添加@Transactional，App添加@EnableTransactionManagement(App不添加似乎也可以)
+
+junit5:详情见SbTest1
+    标注@SpringBootTest(classes = App.class)才能使用springboot的依赖33注入
+    @BeforeAll和@AfterAll:所有测试方法执行前/后执行
+    @BeforeEach和@AfterEach:每个测试方法执行前/后执行
+    @Disabled:执行类里所有方法时，标注此注解的方法不执行。直接执行此方法时可以执行。
+    @RepeatedTest(2):重复测试2次
+    @Timeout(value=1,unit= TimeUnit.SECONDS):该方法超过1s即超时，报如下错
+        java.util.concurrent.TimeoutException: t1() timed out after 1 second
+
+参数化测试:
+    @ParameterizedTest + @MethodSource("t5"):
+        表示用方法t5的返回值作为参数进行测试
+    @ParameterizedTest + @ValueSource(strings={"apple","banana"}):
+        表示用数组{"apple","banana"}作为参数进行测试
+
+springboot-admin-server:用web界面监测项目的一些信息
+    1，被监控项目导入spring-boot-admin-starter-client，并如下配置
+        management.endpoints.enabled-by-default=true(启用所有断点)
+        spring.boot.admin.client.url=http://localhost:8888(监控server的url)
+        spring.boot.admin.client.instance.prefer-ip: true(监控server用ip访问被监控的项目而不是用域名)
+            需要先配置Spring boot actuator，步骤是:
+                导入spring-boot-starter-actuator
+                配置management.endpoints.enabled-by-default=true(启用所有断点)
+                配置management.endpoints.web.exposure.include="*"(暴露所有端点)
+    2，监控项目导入spring-boot-admin-starter-server，配置server.port=8888，启动类上加@EnableAdminServer
