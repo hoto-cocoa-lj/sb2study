@@ -2,6 +2,7 @@ package jp.slq.controller;
 
 import jp.slq.pojo.User;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,12 +15,17 @@ import java.util.HashMap;
 @Slf4j
 @Controller
 public class LeafController {
+
+    @Value("${fish:鲨鱼}")
+    String sayu;
+
     @RequestMapping("/leaf1")
     public String leaf1(Model m, HttpSession s){
         s.setAttribute("cat","green");
         m.addAttribute("a","hello");
         m.addAttribute("link","hello");
-        log.info("test Slf4j");
+        log.info("test @Slf4j");
+        System.out.println(sayu);
         return "leaf1";
     }
     @RequestMapping("/favicon.ico")

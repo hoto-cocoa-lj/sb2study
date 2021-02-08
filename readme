@@ -1,6 +1,10 @@
 springboot2笔记:
 重启springboot项目可能有些数据没更新，可以maven clean package试试。
 
+@Value("${fish:鲨鱼}")
+String sayu;
+表示给sayu赋值配置文件里的fish，如果找不到则赋值鲨鱼
+
 @Import(Cat.class):调用Cat的无参构造器，创建对应的bean，用法见AppConf(.java)。
 @Configuration:用法见AppConf
     标准此注解的类为配置类，此类的方法上标注@Bean，则表示该方法用来创建bean，bean的名字是方法名
@@ -97,3 +101,29 @@ springboot-admin-server:用web界面监测项目的一些信息
                 配置management.endpoints.enabled-by-default=true(启用所有断点)
                 配置management.endpoints.web.exposure.include="*"(暴露所有端点)
     2，监控项目导入spring-boot-admin-starter-server，配置server.port=8888，启动类上加@EnableAdminServer
+
+默认加载application.yml(或properties等)，如果激活test环境，
+则还会加载application-test.yml，且冲突的值以application-test.yml为准。激活方法有两种:
+    1，在application.yml配置spring.profiles.active=test
+    2，在命令行输入java -jar jar包全名 --spring.profiles.active=test
+        命令行方式可以修改配置文件的任意值，且命令行优先
+
+自定义starter:见helloservice-starter模块
+    1，创建starter:
+        1.0，创建springboot模块(不需要是子模块，这里为了方便建了子模块)，删除不需要的文件(主程序,test等)
+        1.1，编写配置类HelloServiceAutoConfiguration
+            @Configuration表示这是配置类
+            @EnableConfigurationProperties(HelloProperties.class)
+                表示创建HelloProperties的bean，并且使用配置文件对HelloProperties进行属性的注入
+            @ConditionalOnMissingBean(HelloService.class)
+                表示如果没有HelloService.class的bean则创建一个
+        1.2，在resources/META-INF下创建spring.factories，并输入内容
+        1.3，用maven install此模块，注意不要spring-boot-maven-plugin
+    2，使用starter:
+        1.1，maven导入自定义的starter
+        1.2，由于HelloProperties有@ConfigurationProperties，可以在配置文件进行属性的设置
+        1.3，用@Autowired进行HelloService的注入即可
+    注意:HelloServiceAutoConfiguration里，@ConditionalOnMissingBean写在方法上的原因:
+        如果写在类上，用户自己创建HelloService时HelloServiceAutoConfiguration不会创建实例，
+        这样HelloProperties也不会被创建导致找不到。
+        写在方法上可以保证创建HelloProperties，并在用户不创建HelloService时创建它。

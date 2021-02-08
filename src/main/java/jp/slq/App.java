@@ -33,6 +33,5 @@ public class App {
         System.out.println(Arrays.toString(users));                   //[user1]
         System.out.println(Arrays.toString(dogs));                    //[component_dog]
         System.out.println(Arrays.toString(cats));                    //[jp.slq.pojo.Cat, cat-jp.slq.pojo.Cat]
-
     }
 }

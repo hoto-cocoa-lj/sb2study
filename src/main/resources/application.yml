@@ -3,7 +3,15 @@ dog:
 cat:
   catname: greencat
 
+hello:
+  service:
+    prefix: HELLO
+    suffix: BYE!!
+
+
 spring:
+#  profiles:
+#    active: test
   mvc:
     static-path-pattern: /st/**
   web:
